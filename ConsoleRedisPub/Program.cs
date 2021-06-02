@@ -17,7 +17,9 @@ namespace ConsoleRedisPub
         private static string name = string.Empty;
         private static EmailTaskQueue fila = new EmailTaskQueue();
 
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
+            Console.Write("Ideal rodar 2 instancias para melhor visualização funcionando!");
             Console.Write("Name: ");
             name = Console.ReadLine();
 
@@ -31,8 +33,7 @@ namespace ConsoleRedisPub
             // Notify subscriber(s) if you're joining
             pubsub.Publish(PubSubChannel, $"'{name}' joined.");
 
-
-
+            // thread rodando em paralelo para processar a fila
             _ = Task.Run(async () => {
                 while (true)
                 {
@@ -45,7 +46,7 @@ namespace ConsoleRedisPub
                 }
             });
 
-            // Messaging here
+            // Comunicação com o redis.. tudo que for digitado no console vai se enviado para os inscritos no canal
             while (true) {
                 // publica no redis
                 pubsub.Publish(PubSubChannel, $"{name}: {Console.ReadLine()}  " +
